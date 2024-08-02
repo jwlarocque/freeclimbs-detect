@@ -17,14 +17,14 @@ class Prediction:
     confidences: list
 
 
-@post("/", status_code=status_codes.HTTP_200_OK)
+@post("/detect", status_code=status_codes.HTTP_200_OK)
 async def index(
     data: Annotated[UploadFile, Body(media_type=RequestEncodingType.MULTI_PART)]
 ) -> Prediction:
     content = await data.read()
     predictions = None
     with Image.open(BytesIO(content)) as img:
-        predictions = model(img)
+        predictions = model(img, max_det=2000)
         return {
             "boxes": predictions[0].boxes.xyxy.tolist(),
             "confidences": predictions[0].boxes.conf.tolist()

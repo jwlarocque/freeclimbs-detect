@@ -1,4 +1,4 @@
 ultralytics
-litestar
+litestar[standard]
 uvicorn
 pillow
